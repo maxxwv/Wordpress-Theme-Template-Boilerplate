@@ -1,0 +1,29 @@
+{% extends 'base.twig' %}
+{#
+	Post listing page, typically used in blog list and search results
+#}
+
+{% block content %}
+	{% for post in posts %}
+		<article class="{{ post.class }}">
+			<header class="post-header">
+				<a href="{{ post.link|relative }}" >
+					{% if post.thumbnail %}
+					<img src="{{ post.thumbnail.src|relative|e }}" alt="{{ post.thumbnail.alt|e }}" title="{{ post.thumbnail.title|e }}"/>
+					{% endif %}
+					<h1>{{ post.title }}</h1>
+				</a>
+				<h4>{{ post.post_date|date }}</h4>
+				<h4>{{ post.author }}</h4>
+			</header>
+			<div class="post-excerpt">{{ post.get_preview(40, true, "Read More")|wpautop }}</div>
+		</article>
+	{% endfor %}
+	{% include "partials/paginate.twig" %}
+{% endblock %}
+
+{% block hero %}
+<div class="hero-image">
+	<img src="{{ site.header_image|e('esc_url')|relative }}" alt="{{ site.name|e }}" title="{{ site.description|e }}" class="hero" />
+</div>
+{% endblock %}

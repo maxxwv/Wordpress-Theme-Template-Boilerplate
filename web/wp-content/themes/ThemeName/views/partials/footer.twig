@@ -1,0 +1,13 @@
+{#
+	2-row footer setup with logo and navigation
+#}
+<div class="row">
+	<div class="logo">
+		<a href="/" title="{{ bloginfo('name') }}">
+			<img src="{{ site.logo_image|e('esc_url')|relative }}" />
+		</a>
+	</div>
+	<nav id="footer-menu" role="navigation" aria-label="Footer Navigation">
+		{% include "partials/menu.twig" with {"menu" : menus.site_footer.get_items} %}
+	</nav>
+</div>

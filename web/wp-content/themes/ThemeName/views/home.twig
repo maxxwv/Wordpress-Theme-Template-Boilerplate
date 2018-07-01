@@ -1,0 +1,33 @@
+{#
+	home.twig
+
+	This should be only for the home page. We'll have to do some experimenting to see if
+	we need to call this something different just in case we can make more efficient
+	use of the WordPress template hierarchy by making index a bit more generic.
+
+#}
+{% extends "base.twig" %}
+
+{% block hero %}
+	<div class="hero">
+		<img src="{{ posts[0].thumbnail|relative|e }}" alt="{{ posts[0].title|striptags }}" />
+	</div>
+{% endblock %}
+
+{% block header_call_to_action %}
+	<aside class="header call_to_action {{ widget.class }}">
+		{{ widgets.header_call_to_action }}
+	</aside>
+{% endblock %}
+
+{% block content %}
+	{% for post in posts %}
+			{{ post.content }}
+	{% endfor %}
+{% endblock %}
+
+{% block footer_call_to_action %}
+	<aside class="footer call_to_action {{ widget.class }}">
+		{{ widgets.footer_call_to_action }}
+	</aside>
+{% endblock %}

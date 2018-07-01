@@ -1,0 +1,137 @@
+{#
+	This is a blank base template.
+	
+	PLEASE NOTE: if you add a CDN dependency in a twig file footer, please add a
+	corresponding link rel="dns-prefetch" in the head. WordPress will handle this
+	automatically if the file is loaded using \wp_enqueue_script() as of 4.6.0,
+	but obviously can't do it if the file is added in the template file.
+	
+#}
+{#
+	site.admin_email
+	site.blogname
+	site.charset
+	site.description
+	site.id
+	site.language
+	site.name
+	site.url
+	site.page_title
+	site.logo_image
+	site.header_image
+
+	theme.name
+	theme.parent
+	theme.parent_slug
+	theme.slug
+	theme.uri
+	theme.id
+	theme.ID
+	theme.object_type
+
+	posts.{post}.ID
+	posts.{post}.author
+	posts.{post}.post_date
+	posts.{post}.content
+	posts.{post}.title
+	posts.{post}.post_name
+	posts.{post}.slug
+	posts.{post}.class
+	posts.{post}.link
+	posts.{post}.post_excerpt
+	posts.{post}.post_parent
+	posts.{post}.post_status
+	posts.{post}.post_type
+	posts.{post}.menu_orderposts.post.thumbnail.src
+
+	posts.{post}.thumbnail.file_loc
+	posts.{post}.thumbnail.file
+	posts.{post}.thumbnail.sizes (array)
+	posts.{post}.thumbnail.height
+	posts.{post}.thumbnail.width
+	posts.{post}.thumbnail.caption (caption)
+	posts.{post}.thumbnail.post_title (title)
+	posts.{post}.thumbnail.post_content (description)
+	posts.{post}.thumbnail.alt (alt text)
+
+	menus.{menu_slug}
+
+	template (template file name)
+#}
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+{% block html_head_container %}
+	{% include "partials/base_html_head.twig" %}
+{#
+	Include any additional meta or head includes in your partial here, using
+	the "head" block. This could work for site-specific styles or fonts, assuming
+	we don't want to inject them via WordPress. Note that the partial "base_html_head"
+	includes the WP wp_head() function and the page title tag.
+#}
+	{% block head %}
+	{% endblock %}
+{% endblock %}
+</head>
+
+{#
+	To use a specific value for the data-template attribute, create a
+	content block called "templateName" in the partial and define the
+	desired value there. Otherwise, this will print the current file name
+#}
+<body class="{{ body_class }}" data-template="{% block templateName %}{{ _self.getTemplateName()|e }}{% endblock %}">
+	<a href="#content" class="screen-reader-text">Skip to content</a>
+	<header class="row" role="banner">
+		<div class="wrapper">
+			{% include '/partials/header.twig' %}
+			{% block hero %}
+				<div class="hero-image">
+				{% if posts[0].thumbnail %}
+				<img src="{{ posts[0].thumbnail|e('esc_url')|relative }}" alt="{{ posts[0].title|e }}" title="{{ posts[0].excerpt|e }}" class="hero" />
+				{% else %}
+				<img src="{{ site.header_image|e('esc_url')|relative }}" alt="{{ site.name|e }}" title="{{ site.description|e }}" class="hero" />
+				{% endif %}
+			</div>
+			{% endblock %}
+		</div>
+		{% block breadcrumbs %}
+			{{ breadcrumbs }}
+		{% endblock %}
+	</header>
+	
+	{% block header_call_to_action %}
+	{% endblock %}
+
+	<section id="content" class="row" role="main">
+		<div class="wrapper">
+			{% block content %}
+			{% endblock %}
+		</div>
+	</section>
+
+	{% include '/partials/sidebar.twig' %}
+
+	{% block footer_call_to_action %}
+	{% endblock %}
+
+	<footer class="row" role="contentinfo">
+		<div class="wrapper">
+			{% include '/partials/footer.twig' %}
+	
+			{% block footer %}
+			{% endblock %}
+		</div>
+	</footer>
+
+	{% block html_footer %}
+		{% include 'partials/base_html_foot.twig' %}
+{#
+	Include any additional site-specific JavaScript files in the partial's "foot"
+	block. Note that base_html_footer calls wp_footer(), so any files included here
+	will be included after the default WordPress and any files injected using wp_enqueue_scripts().
+#}
+		{% block foot %}
+		{% endblock %}
+	{% endblock %}
+</body>
+</html>

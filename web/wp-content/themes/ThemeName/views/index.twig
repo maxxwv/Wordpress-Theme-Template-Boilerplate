@@ -1,0 +1,17 @@
+{#
+	index.twig
+
+	This is the most general page template available. Unless the page in question
+	is the home page (front page) or is assigned to a specific template in the
+	admin dashboard, this is the file that will render that page.
+#}
+
+{% extends "base.twig" %}
+
+{% block content %}
+	{% for post in posts %}
+		{{ post.content }}
+	{% endfor %}
+	{% include "partials/paginate.twig" %}
+{% endblock %}
+

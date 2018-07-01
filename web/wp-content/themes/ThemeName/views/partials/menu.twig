@@ -1,0 +1,32 @@
+{#
+	Recursive menu builder.
+	Should be included using {% include "partials/menu.twig" with {"menu" : menus.{menu-slug}.get_items} %}
+#}
+{#
+	menu.item.children (array)
+	menu.item.target
+	menu.item.description
+	menu.item.url
+	menu.item.attr_title
+	menu.item.ID
+	menu.item.xfn
+	menu.item.class
+#}
+<ul class="mega-menu-list menu {{ class|e }}">
+	{% for item in menu %}
+		<li class="{{ item.class|e }}">
+			<a href="{{ item.url|e }}"
+				{% if item.target %} target="{{ item.target|e }}"{% endif %}
+				{% if item.description %} description="{{ item.description|e }}"{% endif %}
+				{% if item.xfn %} rel="{{ item.xfn|e }}"{% endif %}
+				{% if item.attr_title %} alt="{{ item.attr_title|e }}"{% endif %}
+				{% if item.ID %} data-id="{{ item.ID }}"{% endif %}
+			>
+				<span>{{ item.title|e }}</span>
+			</a>
+			{% if item.children %}
+				{% include "partials/menu.twig" with { "menu" : item.get_children, "class" : "sub" } %}
+			{% endif %}
+		</li>
+	{% endfor %}
+</ul>

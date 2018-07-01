@@ -1,0 +1,14 @@
+{#
+	Base HTML head template. Please see base.twig for breakdown of
+	available properties.
+#}
+<meta charset="{{ site.charset }}">
+<meta http-equiv="Content-Type" content="text/html; charset={{ site.charset }}" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>{{ site.name }}{% if wp_title %} - {{ wp_title }}{% endif %}</title>
+
+{{ function('wp_head') }}
+
+<link rel="stylesheet" href="{{ theme.path }}/style.css" type="text/css" />
+

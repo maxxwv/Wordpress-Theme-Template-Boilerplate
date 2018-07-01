@@ -1,0 +1,23 @@
+{#	pagination.twig	#}
+
+{% if pagination.pages %}
+	<ul class="pages" role="navigation" aria-label="Pagination">
+		{% if pagination.prev %}
+			<li>
+				<a href="{{ pagination.prev.link }}" class="prev" aria-label="Previous Page">previous</a>
+			</li>
+		{% endif %}
+		{% for page in pagination.pages %}
+			<li>
+				<a href="{{ page.link }}" class="{{ page.class|e }}">
+					{{ page.title|e }}
+				</a>
+			</li>
+		{% endfor %}
+		{% if pagination.next %}
+			<li>
+				<a href="{{ pagination.next.link }}" class="next" aria-label="Next Page">next</a>
+			</li>
+		{% endif %}
+	</ul>
+{% endif %}

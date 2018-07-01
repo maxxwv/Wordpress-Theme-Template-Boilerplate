@@ -1,0 +1,10 @@
+{% extends "base.twig" %}
+{#
+	Content not found template
+#}
+
+{% block content %}
+	<h1>Sorry!</h1>
+	<h4>It appears the page you're looking for either doesn't exist or has been moved. Sorry about that.</h4>
+	{{ function("get_search_form") }}
+{% endblock %}

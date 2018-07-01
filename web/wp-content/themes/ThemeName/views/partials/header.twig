@@ -1,0 +1,13 @@
+{#
+	A header with logo and main site menu layout.
+	See base.twig for available variables.
+#}
+<div class="logo">
+	<a href="/" title="{{ wp_title|e }}">
+		<img src="{{ site.logo_image|e('esc_url')|relative }}" alt="{{ wp_title|e }}" />
+	</a>
+	<h1>{{ site.blogname }}</h1>
+</div>
+<nav id="site-menu" class="row wrapper" role="navigation" aria-label="Site Navigation">
+	{% include 'partials/menu.twig' with {'menu' : menus.site_main.get_items} %}
+</nav>
