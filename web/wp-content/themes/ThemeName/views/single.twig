@@ -12,18 +12,17 @@
 	attributes of the image tag in HTML5.
 #}
 {% block hero %}
-	{% if posts[0].thumbnail %}
+	{% if post.thumbnail %}
 	<div class="hero">
-		<img src="{{ posts[0].thumbnail.src|relative }}"
-			 alt="{{ posts[0].thumbnail.alt|e }}" />
-			 title="{{ posts[0].thumbnail.title|e }}"
-		<caption>{{ posts[0].thumbnail.caption|e }}</caption>
+		<img src="{{ post.thumbnail.src|relative }}"
+			 alt="{{ post.thumbnail.alt|e }}" />
+			 title="{{ post.thumbnail.title|e }}"
+		<caption>{{ post.thumbnail.caption|e }}</caption>
 	</div>
 	{% endif %}
 {% endblock %}
 
 {% block content %}
-	{% for post in posts %}
-		{{ post.content }}
-	{% endfor %}
+	<h1>{{ post.title }}</h1>
+	{{ post.content }}	
 {% endblock %}
