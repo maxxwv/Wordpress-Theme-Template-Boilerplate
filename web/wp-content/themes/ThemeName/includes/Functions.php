@@ -57,7 +57,7 @@ class Functions{
  */
 	public function set_up_theme(){
 		$this->clean_up_head();
-		$this->add_theme_support()();
+		$this->add_theme_support();
 		$this->register_menus();
 		$this->create_post_types();
 		$this->register_widgets();
