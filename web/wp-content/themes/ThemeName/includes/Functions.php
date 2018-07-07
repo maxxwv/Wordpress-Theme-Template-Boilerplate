@@ -235,7 +235,7 @@ class Functions{
  *	@return	array
  */
 	private function get_additional_page_data(array $context){
-		$fn = lcwords(str_replace(array('-',' '), '_', $context['template']));
+		$fn = ucwords(str_replace(array('-',' '), '_', $context['template']));
 		$fn = "get".str_replace(array(' ','.twig','.html','.php'), '', $fn)."_additional_data";
 		if(method_exists($this, $fn)){
 			$context = $this->$fn($context);
