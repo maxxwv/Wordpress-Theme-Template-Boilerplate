@@ -20,10 +20,9 @@ var theme = {
 	destCSS : pkg.directories.content + '/themes/' + themeName,
 };
 /**
- *	Development JavaScript handling.
- *	This does browserify and babelify the files, but doesn't minify
- *	or uglify the file. I'm not outputting a sourcemap right now because
- *	I don't want to have to upload 2 files for every one change.
+ *	Development JavaScript handling
+ *	Browserifies, babelifies, minifies, and uglifies. Also injects
+ *	an inline source map for debugging during development.
  */
 aw.gulp.task('developJS', () => {
 	"use strict";
@@ -60,8 +59,8 @@ aw.gulp.task('watch', () => {
 });
 /**
  *	Product JavaScript handling.
- *	Does everything the development version does, but also
- *	minifies and uglifies the files
+ *	Does everything the development version does, but omits
+ *	the source map
  */
 aw.gulp.task('prodJS', () => {
 	"use strict";
