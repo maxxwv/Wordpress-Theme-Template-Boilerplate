@@ -115,7 +115,7 @@ aw.gulp.task('compileCSS', () => {
  */
 function handleError(e){
 	'use strict';
-	console.log('\u0007');
+	console.log('\x07');
 	console.log(e.stack || e.toString());
 	this.emit('end');
 }
