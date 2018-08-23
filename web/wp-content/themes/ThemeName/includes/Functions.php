@@ -299,10 +299,17 @@ class Functions{
 			$tpl = "index";
 		}
 		$tpl = str_replace(array('.','/',' ','php','"',"'"), '', $tpl);
-		if(!file_exists($this->theme_dir.'views/'.$tpl.$this->file_ext) || !ctype_alnum(str_replace(array('-','_'), '', $tpl))){
-			return '404'.$this->file_ext;
+		foreach(\Timber\LocationManager::get_locations() as $loc){
+			if(
+				   file_exists($loc.$tpl.$this->_fileExt)
+				&& ctype_alnum(str_replace(array('-','_'), '', $tpl))
+				&& is_file($loc.$tpl.$this->_fileExt)
+				&& is_readable($loc.$tpl.$this->_fileExt)
+			){
+				return \esc_attr($tpl).$this->_fileExt;
+			}
 		}
-		return \esc_attr($tpl).$this->file_ext;
+		return '404'.$this->_fileExt;
 	}
 
 /**
