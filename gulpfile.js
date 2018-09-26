@@ -37,9 +37,9 @@ aw.gulp.task('developJS', () => {
 			comments: false,
 		})
 		.bundle()
+		.on('error', handleError)
 		.pipe(aw.vinylSourceStream(script + '.min.js'))
 		.pipe(aw.vinylBuffer())
-		.pipe(aw.plumber(handleError))
 		.pipe(aw.uglify({
 			sourceMap: {
 				url: 'inline'
