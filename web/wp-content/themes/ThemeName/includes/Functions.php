@@ -301,15 +301,15 @@ class Functions{
 		$tpl = str_replace(array('.','/',' ','php','"',"'"), '', $tpl);
 		foreach(\Timber\LocationManager::get_locations() as $loc){
 			if(
-				   file_exists($loc.$tpl.$this->_fileExt)
+				   file_exists($loc.$tpl.$this->fileExt)
 				&& ctype_alnum(str_replace(array('-','_'), '', $tpl))
-				&& is_file($loc.$tpl.$this->_fileExt)
-				&& is_readable($loc.$tpl.$this->_fileExt)
+				&& is_file($loc.$tpl.$this->fileExt)
+				&& is_readable($loc.$tpl.$this->fileExt)
 			){
-				return \esc_attr($tpl).$this->_fileExt;
+				return \esc_attr($tpl).$this->fileExt;
 			}
 		}
-		return '404'.$this->_fileExt;
+		return '404'.$this->fileExt;
 	}
 
 /**
