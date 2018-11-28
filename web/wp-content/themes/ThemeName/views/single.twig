@@ -14,10 +14,7 @@
 {% block hero %}
 	{% if post.thumbnail %}
 	<div class="hero">
-		<img src="{{ post.thumbnail.src|relative }}"
-			 alt="{{ post.thumbnail.alt|e }}"
-			 title="{{ post.thumbnail.title|e }}" />
-		<caption>{{ post.thumbnail.caption|e }}</caption>
+		{% include 'partials/hero.twig' with { 'img' : post.thumbnail } %}
 	</div>
 	{% endif %}
 {% endblock %}

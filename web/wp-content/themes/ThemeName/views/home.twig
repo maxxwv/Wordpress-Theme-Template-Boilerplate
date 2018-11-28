@@ -10,7 +10,7 @@
 
 {% block hero %}
 	<div class="hero">
-		<img src="{{ posts[0].thumbnail|relative|e }}" alt="{{ posts[0].title|striptags }}" />
+		{% include 'partials/hero.twig' with { 'img' : posts[0].thumbnail } %}
 	</div>
 {% endblock %}
 

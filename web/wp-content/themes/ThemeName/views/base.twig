@@ -85,11 +85,11 @@
 		<div class="wrapper">
 			{% include '/partials/header.twig' %}
 			{% block hero %}
-				<div class="hero-image">
+				<div class="hero">
 				{% if posts[0].thumbnail %}
-				<img src="{{ posts[0].thumbnail|e('esc_url')|relative }}" alt="{{ posts[0].title|e }}" title="{{ posts[0].excerpt|e }}" class="hero" />
+					{% include 'partials/hero.twig' with { 'img' : posts[0].thumbnail } %}
 				{% else %}
-				<img src="{{ site.header_image|e('esc_url')|relative }}" alt="{{ site.name|e }}" title="{{ site.description|e }}" class="hero" />
+					{% include 'partials/hero.twig' with { 'img' : site.header_image } %}
 				{% endif %}
 			</div>
 			{% endblock %}
