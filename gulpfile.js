@@ -15,7 +15,7 @@ var paths = {
 	destCSS : `${pkg.directories.content}${path.sep}themes${path.sep}${pkg.name}`,
 };
 
-const develop = aw.gulp.series( aw.gulp.parallel( devJS, devCSS ), browserSync, watchFiles );
+const develop = aw.gulp.series( aw.gulp.parallel( devJS, devCSS ), watchFiles );
 const publish = aw.gulp.parallel( prodJS, prodCSS );
 const pack = aw.gulp.series( zipFiles );
 /**
