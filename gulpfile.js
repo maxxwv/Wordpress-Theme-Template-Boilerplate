@@ -1,94 +1,62 @@
 /* jshint esversion: 6 */
-/* globals require */
-const _ = require('lodash');
+const pkg = require('./package.json'),
+			path = require('path');
+
 const aw = require('gulp-load-plugins')({
 	pattern: ['*'],
-	scope: ['devDependencies','dependencies']
+	scope: ['devDependencies', 'dependencies']
 });
 
-const pkg = require('./package.json');
-var themeName = pkg.name.toLowerCase().replace(new RegExp(' ','g'), '-');
-
-aw.gulp.task('Develop', ['developJS', 'compileCSS', 'watch']);
-aw.gulp.task('Package', ['prodJS', 'compileCSS']);
-
-var theme = {
+var paths = {
 	srcJS : '_assets/javascript/**/*.js',
 	srcCSS : '_assets/less/**/*.less',
 	srcStyle : ['!_assets/less/variables.less', '_assets/less/style.less', '_assets/less/**/*.less'],
-	destJS : pkg.directories.content + '/themes/' + themeName + '/js',
-	destCSS : pkg.directories.content + '/themes/' + themeName,
+	destJS : `${pkg.directories.content}${path.sep}themes${path.sep}${pkg.name}${path.sep}js`,
+	destCSS : `${pkg.directories.content}${path.sep}themes${path.sep}${pkg.name}`,
 };
+
+const develop = aw.gulp.series( aw.gulp.parallel( devJS, devCSS ), browserSync, watchFiles );
+const publish = aw.gulp.parallel( prodJS, prodCSS );
+const pack = aw.gulp.series( zipFiles );
 /**
- *	Development JavaScript handling
- *	Browserifies, babelifies, minifies, and uglifies. Also injects
- *	an inline source map for debugging during development.
+ * Development JavaScript handling - browserify, babelify, uglify JS files defined in package.json#jsFiles
+ * and add a sourcemap for debugging. I may remove the minification/uglification and sourcemaps depending
+ * on how everything works in the field
+ * @param {*} done
  */
-aw.gulp.task('developJS', () => {
-	"use strict";
-	_.forEach(_.castArray(pkg.scripts.entry), (script) => {
+function devJS(done){
+	pkg.jsFiles.scripts.map( script => {
+		script = script.replace('.js', '');
 		aw.browserify({
-			entries: ['./_assets/javascript/' + script + '.js'],
+			entries: [`./_assets/javascript/${script}.js`],
 			debug: false
 		})
-		.transform(aw.babelify, {
-			compact: false,
-			retainLines: true,
+		.transform('babelify', {
+			compact: true,
+			retainLines: false,
 			comments: false,
 		})
 		.bundle()
 		.on('error', handleError)
-		.pipe(aw.vinylSourceStream(script + '.min.js'))
+		.pipe(aw.vinylSourceStream(`${script}.min.js`))
 		.pipe(aw.vinylBuffer())
-		.pipe(aw.uglify({
-			sourceMap: {
-				url: 'inline'
-			}
-		}))
-		.pipe(aw.gulp.dest(theme.destJS));
-	});
-});
-/**
- *	During development, obviously we want the system to watch for any
- *	important changed files and to handle those automatically.
- */
-aw.gulp.task('watch', () => {
-	"use strict";
-	aw.gulp.watch(theme.srcCSS,['compileCSS']);
-	aw.gulp.watch(theme.srcJS,['developJS']);
-});
-/**
- *	Product JavaScript handling.
- *	Does everything the development version does, but omits
- *	the source map
- */
-aw.gulp.task('prodJS', () => {
-	"use strict";
-	_.forEach(_.castArray(pkg.scripts.entry), (script) => {
-		aw.browserify({
-			entries: ['./_assets/javascript/' + script + '.js'],
-			debug: false
-		})
-		.transform(aw.babelify, {
-			compact: true,
-			comments: false
-		})
-		.bundle()
-		.pipe(aw.vinylSourceStream(script + '.min.js'))
-		.pipe(aw.vinylBuffer())
+		.pipe(aw.sourcemaps.init({ loadMaps: true }))
 		.pipe(aw.uglify())
-		.pipe(aw.gulp.dest(theme.destJS));
+		.pipe(aw.sourcemaps.write('../../../maps'))
+		.pipe(aw.gulp.dest(paths.destJS));
 	});
-});
+	done();
+}
 /**
- *	Production and Development .less processing
- *	Processes the .less to CSS, then minifies the file.
+ * Development .LESS handling - concatenate, autoprefix, compile, and minify .less files found in the
+ * ../_assets/less/ directory and add a sourcemap for debugging.
+ * @param {*} done
  */
-aw.gulp.task('compileCSS', () => {
-	"use strict";
-	return aw.gulp
-		.src(theme.srcStyle)
+function devCSS(done){
+	aw.gulp
+		.src(paths.srcStyle)
 		.pipe(aw.plumber(handleError))
+		.pipe(aw.sourcemaps.init({ loadMaps: true }))
 		.pipe(aw.less({
 			strictMath : 'on',
 			strictUnits : 'on',
@@ -98,24 +66,108 @@ aw.gulp.task('compileCSS', () => {
 			browsers: [
 				"last 2 versions",
 				"IE 10"
-			]
+			],
+			grid: true
+		}))
+		.pipe(aw.cssmin())
+		.pipe(aw.sourcemaps.write('../../../maps'))
+		.pipe(aw.rename({
+			extname : '.css',
+			basename : 'style'
+		}))
+		.pipe(aw.gulp.dest(paths.destCSS));
+		done();
+}
+/**
+ * Basic watch task for development purposes
+ * @param {*} done
+ */
+function watchFiles(done){
+	aw.gulp.watch(paths.srcJS, aw.gulp.series( devJS ) );
+	aw.gulp.watch(paths.srcCSS, aw.gulp.series( devCSS ) );
+	done();
+}
+/**
+ * Does everything the devJS function does except create or export a sourcemap.
+ * @param {*} done
+ */
+function prodJS(done){
+	pkg.jsFiles.scripts.map( script => {
+		script = script.replace('.js', '');
+		aw.browserify({
+			entries: [`./_assets/javascript/${script}.js`],
+			debug: false
+		})
+		.transform('babelify', {
+			compact: true,
+			retainLines: false,
+			comments: false,
+		})
+		.bundle()
+		.pipe(aw.vinylSourceStream(`${script}.min.js`))
+		.pipe(aw.vinylBuffer())
+		.pipe(aw.uglify())
+		.pipe(aw.gulp.dest(paths.destJS));
+	});
+	done();
+}
+/**
+ * Does everything the devCSS function does except create or export a sourcemap.
+ * @param {*} done
+ */
+function prodCSS(done){
+	aw.gulp
+		.src(paths.srcStyle)
+		.pipe(aw.less({
+			strictMath : 'on',
+			strictUnits : 'on',
+		}))
+		.pipe(aw.concat('all.css'))
+		.pipe(aw.autoprefixer({
+			browsers: [
+				"last 2 versions",
+				"IE 10"
+			],
+			grid: true
 		}))
 		.pipe(aw.cssmin())
 		.pipe(aw.rename({
 			extname : '.css',
 			basename : 'style'
 		}))
-		.pipe(aw.gulp.dest(theme.destCSS));
-});
+		.pipe(aw.gulp.dest(paths.destCSS));
+		done();
+}
 /**
- *	Notify the developer there's an error, console the error message,
- *	and keep the watch task alive.
- *	@param	error
- *	@return	void
+ * Package files into a .zip for deployment/distribution
+ * @param {*} done
+ */
+function zipFiles(done){
+	aw.gulp
+		.src([
+			`./${pkg.directories.content}/**/*`
+		], {
+			allowEmpty: true
+		})
+		.pipe(aw.rename((file) => {
+			file.dirname = pkg.name + path.sep + file.dirname;
+		}))
+		.pipe(aw.zip(pkg.name + '.' + pkg.version + '.zip'))
+		.pipe(aw.gulp.dest('./'));
+		done();
+}
+/**
+ * Gracefully log errors to the console.
+ * @param {*} e
  */
 function handleError(e){
-	'use strict';
-	console.log('\x07');
+	console.log('\u0007');
 	console.log(e.stack || e.toString());
 	this.emit('end');
 }
+/**
+ * API
+ */
+exports.Develop = develop;
+exports.Publish = publish;
+exports.Package = pack;
