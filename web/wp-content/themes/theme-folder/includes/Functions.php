@@ -18,8 +18,8 @@ class Functions{
 	private	$_themeDir;
 /**
  *	@var	string		Template file extension. Everyone's going to have to
- *				update thier IDE configuration files to read and
- *				color .twig files correctly unless we want to use .html
+ *				update thier IDE configuration files to read and color
+ *				.twig files correctly unless we want to use .html
  *				as an extension, which is possible.
  */
 	private	$_fileExt;
@@ -39,13 +39,13 @@ class Functions{
  */
 	private function cleanUpHead(){
 		\remove_action('wp_head','wlwmanifest_link');
-		\remove_action('wp_head','feed_links',2);
+		\remove_action('wp_head','feed_links', 2);
 		\remove_action('wp_head','rsd_link');
 		\remove_action('wp_head','wp_generator');
 		\remove_action('wp_head','start_post_rel_link');
 		\remove_action('wp_head','index_rel_link');
 		\remove_action('wp_head','adjacent_posts_rel_link_wp_head');
-		\remove_action('wp_head','print_emoji_detection_script',7);
+		\remove_action('wp_head','print_emoji_detection_script', 7);
 		\remove_action('admin_print_scripts','print_emoji_detection_script');
 		\remove_action('wp_print_styles','print_emoji_styles');
 		\remove_action('admin_print_style','print_emoji_styles');
