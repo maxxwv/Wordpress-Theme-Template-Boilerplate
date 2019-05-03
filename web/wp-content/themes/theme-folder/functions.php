@@ -15,10 +15,10 @@ if(!class_exists('\Timber\Timber')){
 require_once('includes/Functions.php');
 $fn = new Functions();
 
-\add_action('init',					array($fn,'setUpTheme'));
-\add_action('widgets_init',		array($fn,'registerWidgets'));
-\add_filter('upload_mimes',		array($fn,'enableSVGUpload'));
+\add_action('init', array($fn,'set_up_theme'));
+\add_action('widgets_init', array($fn,'register_widgets'));
+\add_filter('upload_mimes', array($fn,'enable_svg_upload'));
 
-\add_action('wp_enqueue_scripts',		array($fn,'queueResources'));
-\add_filter('timber_context',			array($fn,'addToContext'));
-\add_filter('the_content',			array($fn,'autoEscape'),0,1);
+\add_action('wp_enqueue_scripts', array($fn,'queue_resources'));
+\add_filter('timber_context', array($fn,'add_to_context'));
+\add_filter('the_content', array($fn,'auto_escape'),0,1);

@@ -15,20 +15,20 @@ class Functions{
  *				to create a main theme, then spin off child themes from
  *				that, which could be useful in the future.
  */
-	private	$_themeDir;
+	private	$theme_dir;
 /**
  *	@var	string		Template file extension. Everyone's going to have to
  *				update thier IDE configuration files to read and color
  *				.twig files correctly unless we want to use .html
  *				as an extension, which is possible.
  */
-	private	$_fileExt;
+	private	$file_ext;
 /**
  *	Constructor method.
  */
 	public function __construct(){
-		$this->_themeDir = \get_stylesheet_directory_uri().DIRECTORY_SEPARATOR;
-		$this->_fileExt = \apply_filters('aw_change_file_ext', '.twig');
+		$this->theme_dir = \get_stylesheet_directory_uri().DIRECTORY_SEPARATOR;
+		$this->file_ext = apply_filters('aw_change_file_ext', '.twig');
 	}
 
 /**
@@ -37,7 +37,7 @@ class Functions{
  *	other than weigh down the page load.
  *	@return		void
  */
-	private function cleanUpHead(){
+	private function clean_up_head(){
 		\remove_action('wp_head','wlwmanifest_link');
 		\remove_action('wp_head','feed_links', 2);
 		\remove_action('wp_head','rsd_link');
@@ -55,21 +55,21 @@ class Functions{
  *	Set up the entire theme.
  *	@return	void
  */
-	public function setUpTheme(){
-		$this->cleanUpHead();
-		$this->addThemeSupport();
-		$this->registerMenus();
-		$this->createPostTypes();
-		$this->registerWidgets();
-		$this->registerSidebars();
-		$this->registerTaxonomy();
+	public function set_up_theme(){
+		$this->clean_up_head();
+		$this->add_theme_support();
+		$this->register_menus();
+		$this->create_post_types();
+		$this->register_widgets();
+		$this->register_sidebars();
+		$this->register_taxonomy();
 	}
 
 /**
  *	Base WP add theme support functionality, this gets called every theme regardless.
  *	@return	void
  */
-	private function addThemeSupport(){
+	private function add_theme_support(){
 		\add_theme_support('post-formats');
 		\add_theme_support('post-thumbnails');
 		\add_theme_support('menus');
@@ -93,25 +93,26 @@ class Functions{
  *	@param		array		$mimes		Default allowed mime types
  *	@return		array
  */
-	public function enableSVGUpload(array $mimes){
+	public function enable_svg_upload(array $mimes){
 		$mimes['svg'] = 'image/svg+xml';
 		return $mimes;
 	}
+
 /**
  *	Queue site assets - JS, CSS, fonts - as necessary
  *	@return	void
  */
-	public function queueResources(){
-		$this->queueJavascript();
-		$this->queueFonts();
-		$this->queueCSS();
+	public function queue_resources(){
+		$this->queue_javascript();
+		$this->queue_fonts();
+		$this->queue_css();
 	}
 
 /**
  *	Queue necessary javascript
  *	@return	void
  */
-	private function queueJavascript(){
+	private function queue_javascript(){
 		\wp_enqueue_script('polyfill', '//cdnjs.cloudflare.com/ajax/libs/js-polyfills/0.1.41/polyfill.js', array(), null, true);
 		\wp_enqueue_script('cookie', '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js', array(), null, true);
 		\wp_enqueue_script('site', $this->_themeDir.'js/siteScript.min.js', array('cookie','jquery'), null, true);
@@ -120,7 +121,8 @@ class Functions{
  *	Queue any externally hosted (Google or TypeKit) fonts
  *	@return		void
  */
-	private function queueFonts(){
+	private function queue_fonts(){
+
 	}
 /**
  *	Queue the site stylesheet
@@ -128,7 +130,7 @@ class Functions{
  *	into the base_html_head.twig file.
  *	@return	void
  */
-	private function queueCSS(){
+	private function queue_css(){
 		\wp_enqueue_style('cookie', '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css');
 	}
 
@@ -136,7 +138,7 @@ class Functions{
  *	Set up the navigation menu areas to be used throughout the site
  *	@return	void
  */
-	private function registerMenus(){
+	private function register_menus(){
 		\register_nav_menus(array(
 			'site_main' => __('Main Menu', 'aw'),
 			'site_footer' => __('Footer Menu', 'aw')
@@ -147,28 +149,28 @@ class Functions{
  *	Register system-wide widgets.
  *	@return		void
  */
-	public function registerWidgets(){
+	public function register_widgets(){
 	}
 
 /**
  *	Registers the sidebars.
  *	@return		void
  */
-	public function registerSidebars(){
+	public function register_sidebars(){
 	}
 
 /**
  *	Register any custom taxonomies.
  *	@return		void
  */
-	private function registerTaxonomy(){
+	private function register_taxonomy(){
 	}
 
 /**
  *	Create the custom post types we're using for the site.
  *	@return		void
  */
-	private function createPostTypes(){
+	private function create_post_types(){
 	}
 
 /**
@@ -187,33 +189,33 @@ class Functions{
  *	@param	array	$context		Base Timber object in an associative array
  *	@return	array
  */
-	public function addToContext(array $context){
+	public function add_to_context(array $context){
 		if(defined('DOING_AJAX') && DOING_AJAX){
 			return $context;
 		}
-		$context['menus'] = $this->getRegisteredMenus();
-		$context['template'] = $this->getRenderTemplate($context['posts']);
-		$context['widgets'] = $this->getWidgets();
-		$context['pagination'] = $this->addPagination();
-		$context = $this->getAdditionalPageData($context);
-		$context['site']->header_image = $this->getHeaderImage();
-		$context['site']->logo_image = $this->getLogoImage();
+		$context['menus'] = $this->get_registered_menus();
+		$context['template'] = $this->get_render_template($context['posts']);
+		$context['widgets'] = $this->get_widgets();
+		$context['pagination'] = $this->add_pagination();
+		$context = $this->get_additional_page_data($context);
+		$context['site']->header_image = $this->get_header_image();
+		$context['site']->logo_image = $this->get_logo_image();
 		return $context;
 	}
 /**
  *	Gather and return necessary widgets.
  *	@return		array		Array of widgets for use in the templates
  */
-	private function getWidgets(){
+	private function get_widgets(){
 //		\Timber\Timber::get_widgets('widget_name');
 	}
 /**
- *	Gather and return the default header image.
+ *	Gather and return the header image.
  *	Possibly need to refactor this so that we inject the header image into the site
  *	sub-object of the Twig object
  *	@return		\Timber\Image
  */
-	private function getHeaderImage(){
+	private function get_header_image(){
 		if(empty($this->header_image)){
 			return new \Timber\Image(\get_custom_header()->url);
 		}
@@ -222,7 +224,7 @@ class Functions{
  *	Gather and return the theme logo customization
  *	@return		\Timber\Image
  */
-	private function getLogoImage(){
+	private function get_logo_image(){
 		if(empty($this->logo_image)){
 			$logo = \wp_get_attachment_image_src(\get_theme_mod('custom_logo'), 'full');
 			return new \Timber\Image($logo[0]);
@@ -231,14 +233,14 @@ class Functions{
 /**
  *	Figure out if there's any additional data to gather, then gather it.
  *	For instance, if the template name is 'secondary-navigation', we'd know that
- *	that page needs a secondary navigation. So this method calls $this->addSecondaryNavigationAdditionalData()
+ *	that page needs a secondary navigation. So this method calls $this->add_secondary_navigation_additional_data()
  *	and returns the result in the proper place in the context array.
  *	@param	array	$context		Timber context array
  *	@return	array
  */
-	private function getAdditionalPageData(array $context){
-		$fn = ucwords(str_replace(array('-','_'), ' ', $context['template']));
-		$fn = "get".str_replace(array(' ','.twig','.html','.php'), '', $fn)."AdditionalData";
+	private function get_additional_page_data(array $context){
+		$fn = ucwords(str_replace(array('-',' '), '_', $context['template']));
+		$fn = "get".str_replace(array(' ','.twig','.html','.php'), '', $fn)."_additional_data";
 		if(method_exists($this, $fn)){
 			$context = $this->$fn($context);
 		}
@@ -250,7 +252,7 @@ class Functions{
  *	@param		array		$context		Context to be passed to Twig
  *	@return		array
  */
-	private function getHomeAdditionalData(array $context){
+	private function get_home_additional_data(array $context){
 		return $context;
 	}
 
@@ -258,7 +260,7 @@ class Functions{
  *	Get the pagination for the current page of the site, if applicable.
  *	@return	array
  */
-	private function addPagination(){
+	private function add_pagination(){
 		$pg = \Timber\Timber::get_pagination();
 		return $pg;
 	}
@@ -278,15 +280,11 @@ class Functions{
  *	the base index view template, but I could be argued out of that opinion if
  *	necessary.
  *
- * Note that this can be extended by adding an entry to \Timber::$locations[]; This
- * allows template overrides in child themes or - more importantly - plugins
- * if necessary.
- *
  *	@param	array	$post		Single-value indexed array of post (or empty if
  *				the routing request should result in a 404 page)
  *	@return	string			View template file name
  */
-	private function getRenderTemplate(\ArrayObject $post){
+	private function get_render_template(\ArrayObject $post){
 		$post = isset($post[0]) ? $post[0] : null;
 		$tpl = !empty($post) ? \get_page_template_slug($post->ID) : null;
 		if(empty($tpl)){
@@ -307,22 +305,22 @@ class Functions{
 		$tpl = str_replace(array('.','/',' ','php','"',"'"), '', $tpl);
 		foreach(\Timber\LocationManager::get_locations() as $loc){
 			if(
-				   file_exists($loc.$tpl.$this->_fileExt)
+				   file_exists($loc.$tpl.$this->file_ext)
 				&& ctype_alnum(str_replace(array('-','_'), '', $tpl))
-				&& is_file($loc.$tpl.$this->_fileExt)
-				&& is_readable($loc.$tpl.$this->_fileExt)
+				&& is_file($loc.$tpl.$this->file_ext)
+				&& is_readable($loc.$tpl.$this->file_ext)
 			){
-				return \esc_attr($tpl).$this->_fileExt;
+				return \esc_attr($tpl).$this->file_ext;
 			}
 		}
-		return '404'.$this->_fileExt;
+		return '404'.$this->file_ext;
 	}
 
 /**
  *	Converts the WordPress menus into TimberMenu objects.
  *	@return	array
  */
-	private function getRegisteredMenus(){
+	private function get_registered_menus(){
 		$menus = \get_registered_nav_menus();
 		$ret = array();
 		foreach($menus as $m=>$name){
@@ -332,16 +330,18 @@ class Functions{
 	}
 
 /**
- *	Timber does include the static property \Timber::$autoescape that can be set to true
- *	in the system set up. However, as some of the content comes through WP functions
- *	that escape, there's a lot of double-escaping that goes on. I'm leaving on the
- *	sanitize_post() just to be safe (it doesn't double-escape) and will revisit this
- *	once Timber 2.0 is officially released.
- *	@see        https://developer.wordpress.org/reference/functions/sanitize_post/
+ *	I'm a little disappointed that Timber disables Twig's
+ *	auto-escaping functionality, but given WP's fairly inconsistent
+ *	escaping at compile time rather than output, it's understandable.
+ *	Attempting to circumvent the issue by using \wp_kses_post() - it's
+ *	a give and take. There could be issues with attempting to iframe
+ *	youtube or vimeo videos, for instance.
+ *	@see		\wp_kses_post()
+ *	@see		https://github.com/timber/timber/issues/1557
  *	@param		string		$content		Object content
  *	@return		string
  */
-	public function autoEscape($content){
-		return \wp_make_content_images_responsive(\sanitize_post($content));
+	public function auto_escape($content){
+		return \wp_make_content_images_responsive(\wp_kses_post($content));
 	}
 }
