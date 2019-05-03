@@ -8,11 +8,7 @@ A basic theme boilerplate, this will get you to a (very) minimal viable product 
 
 The basic point of the theme is separation of concerns that sometimes doesn't happen in WordPress themes. The business logic is encapsulated in the functions object, while the display logic is completely contained within the template files. There's also a rudimentary automation set up using gulp that concatenates and minifies .less stylesheets and minifies and transpiles individual JavaScript files. I know some would argue that the JS files should be concatenated as well (and obviously the gulpfile can be modified to do that), but my feeling is with the growing adoption of http2 and more efficient servers, it's actually better to only load JS functionality for the pages in which it's actually used. Oftentimes there's a large amount of code for the home page, for example, that's not really needed anywhere else in the site.
 
-Note that there are two branches to this theme. The main theme is set up to use the WordPress plugin repo version of [Timber](https://wordpress.org/plugins/timber-library/) - this version uses Twig 1.x and can run on PH 5.6+.
-
-The twig_2x branch uses the composer installed (and preferred) version of Timber, which uses Twig 2.x and requires PHP 7.x.
-
-Most hosting packages are getting on the ball with regard to modern PHP versions, but enough are still behind that it seemed good to offer both options. If you use the main branch and do not install and activate the Timber plugin, you'll get a warning message on both the front and back ends. If you opt for the twig_2x branch, you'll not get notifications when the Timber plugin itself is updated.
+There are two possibilities for using the Timber plugin with this theme. You can use Composer to require Timber via the command line - this is the preferred method. However, it's also perfectly fine if you want to install the plugin directly from the WordPress plugin repo [Here](https://wordpress.org/plugins/timber-library/).
 
 ## Installation
 
@@ -26,12 +22,12 @@ Most hosting packages are getting on the ball with regard to modern PHP versions
 This is pretty straight forward, I hope. You'll need to update a few things before you actually get started.
 
  - Rename the `ThemeName` directory to your theme name.
-     - If you're using the gulp automation, make the theme directory name all lower case and use dashes instead of spaces.
+ - If you're using the gulp automation, make the theme directory name all lower case and use dashes instead of spaces.
  - In the main `functions.php` file, change the namespace to one more appropriate to your theme.
-     - Do the same in the `includes/Functions.php` file.
+ - Do the same in the `includes/Functions.php` file.
  - Open the `package.json` file and change the Theme Name to match your theme directory name.
-     - Here you can use uppercase letters and spaces, just know that the spaces will be converted to dashes and and uppercase letters lowercased in processing.
-     - For example, 'My Awesome Theme' will match the `themes/my-awesome-theme` directory.
+ - Here you can use uppercase letters and spaces, just know that the spaces will be converted to dashes and and uppercase letters lowercased in processing.
+ - For example, 'My Awesome Theme' will match the `themes/my-awesome-theme` directory.
  - Update the theme name in the `_assets/less/style.less` file to match the theme name in the `package.json` file.
 
 While developing, the `Develop` gulp task will watch any file in the `_assets/less` and `_assets/javascript` directories for changes. All compiled files will be minimized, and the JavaScript file will have an inline sourcemap appended. The `Package` gulp task will obviously not watch for changes, and will forgo the inline sourcemap for the JavaScript file. Everything else is pretty much the same.
