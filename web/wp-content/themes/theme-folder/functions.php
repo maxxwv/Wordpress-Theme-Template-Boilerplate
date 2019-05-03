@@ -5,7 +5,7 @@ namespace AW\ThemeName;
  */
 defined('ABSPATH') or die('No direct access, please');
 
-if(!class_exists('Timber')){
+if(!class_exists('\Timber\Timber')){
 	\add_action('admin_notices', function(){
 		print("<div class='error'><h1>Please activate the Timber plugin</h1></div>");
 	});
