@@ -1,0 +1,32 @@
+{% extends "base.twig" %}
+{#
+	Content not found template
+#}
+{#
+	site.admin_email
+	site.blogname
+	site.charset
+	site.description
+	site.id
+	site.language
+	site.multisite (boolean and probably not necessary for us)
+	site.name
+	site.title
+	site.url
+	site.rss2
+
+	theme.name
+	theme.parent
+	theme.parent_slug
+	theme.slug
+	theme.uri
+	theme.id
+	theme.ID
+	theme.object_type
+#}
+
+{% block content %}
+	<h1>Sorry!</h1>
+	<h4>It appears the page you're looking for either doesn't exist or has been moved. Sorry about that.</h4>
+	{% include 'partials/search_form.twig' %}
+{% endblock %}

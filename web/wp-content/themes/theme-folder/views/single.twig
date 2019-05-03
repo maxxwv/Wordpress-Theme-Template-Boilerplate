@@ -1,0 +1,50 @@
+{#
+	single.twig
+
+	This is the individual blog post template.
+#}
+{#
+	posts.post.ID
+	posts.post.author
+	posts.post.post_date
+	posts.post.content
+	posts.post.title
+	posts.post.post_name
+	posts.post.slug
+	posts.post.class
+	posts.post.link
+	posts.post.post_excerpt
+	posts.post.post_parent
+	posts.post.post_status
+	posts.post.post_type
+	posts.post.menu_order
+	posts.post.thumbnail.src
+	posts.post.thumbnail.file_loc
+	posts.post.thumbnail.file
+	posts.post.thumbnail.sizes (array)
+	posts.post.thumbnail.height
+	posts.post.thumbnail.width
+	posts.post.thumbnail.caption (caption)
+	posts.post.thumbnail.post_title (title)
+	posts.post.thumbnail.post_content (description)
+	posts.post.thumbnail.alt (alt text)
+#}
+{% extends "index.twig" %}
+{#
+	Need to run a definitive test to see if the srcset attribute has any bearing, given the way that WP handles media files.
+#}
+{#
+	Note that according to https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img, description is not valid
+	attributes of the image tag in HTML5.
+#}
+{% block hero %}
+	{% if post.thumbnail %}
+	<div class="hero">
+		{% include 'partials/hero.twig' with { 'img' : post.thumbnail } %}
+	</div>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{{ post.content }}
+{% endblock %}
