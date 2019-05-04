@@ -14,23 +14,20 @@ There are two possibilities for using the Timber plugin with this theme. You can
 
  - Copy the files into the `wp-content/themes/[your-theme-name]` directory.
  - If you're using the plugin-in version of the theme, install and activate the Timber plugin. Otherwise, navigate to your theme directory and `composer install` to download Timber and it's dependencies.
- - Select template files and copy them into the `views` and `partials` directories.
  - Activate the theme and start developing.
 
 ## Usage
 
 This is pretty straight forward, I hope. You'll need to update a few things before you actually get started.
 
- - Rename the `ThemeName` directory to your theme name.
+ - Rename the `theme-folder` directory to your theme name.
  - If you're using the gulp automation, make the theme directory name all lower case and use dashes instead of spaces.
  - In the main `functions.php` file, change the namespace to one more appropriate to your theme.
  - Do the same in the `includes/Functions.php` file.
- - Open the `package.json` file and change the Theme Name to match your theme directory name.
- - Here you can use uppercase letters and spaces, just know that the spaces will be converted to dashes and and uppercase letters lowercased in processing.
- - For example, 'My Awesome Theme' will match the `themes/my-awesome-theme` directory.
+ - Open the `package.json` file and change the `name` attribute to match your theme directory name.
  - Update the theme name in the `_assets/less/style.less` file to match the theme name in the `package.json` file.
 
-While developing, the `Develop` gulp task will watch any file in the `_assets/less` and `_assets/javascript` directories for changes. All compiled files will be minimized, and the JavaScript file will have an inline sourcemap appended. The `Package` gulp task will obviously not watch for changes, and will forgo the inline sourcemap for the JavaScript file. Everything else is pretty much the same.
+While developing, the `Develop` gulp task will watch any file in the `_assets/less` and `_assets/javascript` directories for changes. All compiled files will be minimized. The `Package` gulp task will obviously not watch for changes, but everything else is pretty much the same.
 
 ### Custom templates
 
