@@ -4,7 +4,7 @@ ____
 
 ## Description
 
-A basic theme boilerplate, this will get you to a (very) minimal viable product in minutes. It won't be pretty, and the template files are located in a separate library so you'll have to pick and choose and copy those over as well, but with a few small changes the basic grunt work should be taken care of.
+A basic theme boilerplate, this will get you to a (very) minimal viable product in minutes. It won't be pretty, but with a few small changes the basic grunt work should be taken care of.
 
 The basic point of the theme is separation of concerns that sometimes doesn't happen in WordPress themes. The business logic is encapsulated in the functions object, while the display logic is completely contained within the template files. There's also a rudimentary automation set up using gulp that concatenates and minifies .less stylesheets and minifies and transpiles individual JavaScript files. I know some would argue that the JS files should be concatenated as well (and obviously the gulpfile can be modified to do that), but my feeling is with the growing adoption of http2 and more efficient servers, it's actually better to only load JS functionality for the pages in which it's actually used. Oftentimes there's a large amount of code for the home page, for example, that's not really needed anywhere else in the site.
 
