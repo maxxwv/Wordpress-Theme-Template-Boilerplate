@@ -82,8 +82,46 @@ class Functions{
 		));
 		\add_theme_support('responsive-embeds');
 		\add_post_type_support('page', 'excerpt');
+		$this->gutenbergSupport();
 	}
-
+/**
+ *	Remove the font and background color options in Gutenberg
+ *	@return	void
+ */
+ private function gutenbergSupport(){
+	\add_theme_support('editor-color-palette');
+	\add_theme_support('disable-custom-colors');
+	\add_theme_support('editor-font-sizes', [['name'=>'Normal','size'=>16,'slug'=>'normal']]);
+	\add_theme_support('disable-custom-font-sizes');
+	\add_theme_support('align-wide');
+}
+/**
+ * Disallow blocks that could potentially alter the design of the site.
+ * @param array|boolean $allowed Array of allowed block types or boolean true for all blocks
+ * @param \WP_Post $post Current post object
+ * @return array
+ */
+	public function whitelistBlocks($allowed, \WP_Post $post){
+		$allowed = [
+			'core/paragraph',
+			'core/image',
+      'core/cover',
+			'core/gallery',
+			'core/list',
+			'core/button',
+			'core/columns',
+			'core/column',
+			'core-embed/youtube',
+			'core-embed/vimeo',
+			'core/separator',
+			'core/text-columns',
+			'core/heading',
+			'core/subhead',
+			'core/block',
+			'core/shortcode',
+		];
+		return \apply_filters('aw_theme_block_types', $allowed);
+	}
 /**
  *	Enable SVG file uploads.
  *	Used for service page featured image.
