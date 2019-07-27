@@ -11,7 +11,6 @@ var themeName = pkg.name;
 var paths = {
 	srcJS : '_assets/javascript/**/*.js',
 	srcCSS : '_assets/less/**/*.less',
-	srcStyle : ['!_assets/less/variables.less', '_assets/less/style.less', '_assets/less/**/*.less'],
 	destJS : `${pkg.directories.content}/themes/${themeName}/js`,
 	destCSS : `${pkg.directories.content}/themes/${themeName}`,
 };
@@ -27,7 +26,7 @@ const pack = aw.gulp.series( zipFiles );
  * @param {*} done
  */
 function devJS(done){
-	pkg.jsFiles.scripts.map( script => {
+	pkg.entries.scripts.map( script => {
 		script = script.replace('.js', '');
 		aw.browserify({
 			entries: [`./_assets/javascript/${script}.js`],
@@ -50,34 +49,27 @@ function devJS(done){
 	done();
 }
 /**
- * Development .LESS handling - concatenate, autoprefix, compile, and minify .less files found in the
+ * Development .LESS handling - autoprefix, compile, and minify .less files found in the
  * ../_assets/less/ directory and add a sourcemap for debugging.
  * @param {*} done
  */
 function devCSS(done){
-	aw.gulp
-		.src(paths.srcStyle)
-		.pipe(aw.plumber(handleError))
-		.pipe(aw.sourcemaps.init({ loadMaps: true }))
-		.pipe(aw.less({
-			strictMath : 'on',
-			strictUnits : 'on',
-		}))
-		.pipe(aw.concat('all.css'))
-		.pipe(aw.autoprefixer({
-			browsers: [
-				"last 2 versions",
-				"IE 10"
-			],
-			grid: true
-		}))
-		.pipe(aw.cssmin())
-		.pipe(aw.sourcemaps.write('../../../maps'))
-		.pipe(aw.rename({
-			extname : '.css',
-			basename : 'style'
-		}))
-		.pipe(aw.gulp.dest(paths.destCSS));
+	pkg.entries.styles.map( style => {
+		aw.gulp
+			.src(`./_assets/less/${style}.less`)
+			.pipe(aw.plumber(handleError))
+			.pipe(aw.sourcemaps.init({ loadMaps: true }))
+			.pipe(aw.less({
+				strictMath : 'on',
+				strictUnits : 'on',
+			}))
+			.pipe(aw.autoprefixer({
+				grid: true
+			}))
+			.pipe(aw.cssmin())
+			.pipe(aw.sourcemaps.write('../../maps'))
+			.pipe(aw.gulp.dest(paths.destCSS));
+		});
 		done();
 }
 /**
@@ -94,7 +86,7 @@ function watchFiles(done){
  * @param {*} done
  */
 function prodJS(done){
-	pkg.jsFiles.scripts.map( script => {
+	pkg.entries.scripts.map( script => {
 		script = script.replace('.js', '');
 		aw.browserify({
 			entries: [`./_assets/javascript/${script}.js`],
@@ -118,26 +110,19 @@ function prodJS(done){
  * @param {*} done
  */
 function prodCSS(done){
-	aw.gulp
-		.src(paths.srcStyle)
-		.pipe(aw.less({
-			strictMath : 'on',
-			strictUnits : 'on',
-		}))
-		.pipe(aw.concat('all.css'))
-		.pipe(aw.autoprefixer({
-			browsers: [
-				"last 2 versions",
-				"IE 10"
-			],
-			grid: true
-		}))
-		.pipe(aw.cssmin())
-		.pipe(aw.rename({
-			extname : '.css',
-			basename : 'style'
-		}))
-		.pipe(aw.gulp.dest(paths.destCSS));
+	pkg.entries.styles.map( style => {
+		aw.gulp
+			.src(`./_assets/less/${style}.less`)
+			.pipe(aw.less({
+				strictMath : 'on',
+				strictUnits : 'on',
+			}))
+			.pipe(aw.autoprefixer({
+				grid: true
+			}))
+			.pipe(aw.cssmin())
+			.pipe(aw.gulp.dest(paths.destCSS));
+		});
 		done();
 }
 /**

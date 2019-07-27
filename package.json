@@ -117,9 +117,12 @@
   "directories": {
     "content": "web/wp-content"
   },
-  "jsFiles": {
+  "entries": {
     "scripts": [
       "siteScript"
+    ],
+    "styles": [
+      "style"
     ]
   }
 }
