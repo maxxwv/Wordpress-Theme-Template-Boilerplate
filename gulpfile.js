@@ -38,7 +38,7 @@ function devJS(done){
 			comments: false,
 		})
 		.bundle()
-		.on('error', handleError)
+		.pipe(aw.plumber(handleErrorJS))
 		.pipe(aw.vinylSourceStream(`${script}.min.js`))
 		.pipe(aw.vinylBuffer())
 		.pipe(aw.sourcemaps.init({ loadMaps: true }))
@@ -158,13 +158,29 @@ function zipFiles(done){
 		done();
 }
 /**
- * Gracefully log errors to the console.
+ * Gracefully log CSS errors to the console.
  * @param {*} e
  */
 function handleError(e){
-	console.log('\u0007');
+	beep();
 	console.log(e.stack || e.toString());
 	this.emit('end');
+}
+/**
+ * Gracefully log JavaScript errors to the console.
+ * @param {*} e
+ */
+function handleErrorJS(e, src){
+	beep();
+	console.log(`Error in file ${e.fileName}:`);
+	console.log(e.cause);
+	this.emit('end');
+}
+/**
+ * Emit a beep
+ */
+function beep(){
+	console.log('\u0007');
 }
 /**
  * API
