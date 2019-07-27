@@ -4,7 +4,7 @@ const pkg = require('./package.json'),
 
 const aw = require('gulp-load-plugins')({
 	pattern: ['*'],
-	scope: ['devDependencies', 'dependencies']
+	scope: ['dependencies', 'devDependencies']
 });
 
 var paths = {
@@ -18,6 +18,7 @@ var paths = {
 const develop = aw.gulp.series( aw.gulp.parallel( devJS, devCSS ), watchFiles );
 const publish = aw.gulp.parallel( prodJS, prodCSS );
 const pack = aw.gulp.series( zipFiles );
+
 /**
  * Development JavaScript handling - browserify, babelify, uglify JS files defined in package.json#jsFiles
  * and add a sourcemap for debugging. I may remove the minification/uglification and sourcemaps depending
@@ -41,7 +42,7 @@ function devJS(done){
 		.pipe(aw.vinylSourceStream(`${script}.min.js`))
 		.pipe(aw.vinylBuffer())
 		.pipe(aw.sourcemaps.init({ loadMaps: true }))
-		.pipe(aw.uglify())
+		.pipe(aw.terser())
 		.pipe(aw.sourcemaps.write('../../../maps'))
 		.pipe(aw.gulp.dest(paths.destJS));
 	});
@@ -106,7 +107,7 @@ function prodJS(done){
 		.bundle()
 		.pipe(aw.vinylSourceStream(`${script}.min.js`))
 		.pipe(aw.vinylBuffer())
-		.pipe(aw.uglify())
+		.pipe(aw.terser())
 		.pipe(aw.gulp.dest(paths.destJS));
 	});
 	done();
