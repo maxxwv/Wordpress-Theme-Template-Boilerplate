@@ -22,3 +22,5 @@ $fn = new Functions();
 \add_action('wp_enqueue_scripts', array($fn,'queue_resources'));
 \add_filter('timber_context', array($fn,'add_to_context'));
 \add_filter('the_content', array($fn,'auto_escape'),0,1);
+
+\add_filter('allowed_block_types', [$fn, 'whitelist_blocks'], 0, 2);
