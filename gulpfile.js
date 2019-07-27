@@ -7,12 +7,13 @@ const aw = require('gulp-load-plugins')({
 	scope: ['dependencies', 'devDependencies']
 });
 
+var themeName = pkg.name;
 var paths = {
 	srcJS : '_assets/javascript/**/*.js',
 	srcCSS : '_assets/less/**/*.less',
 	srcStyle : ['!_assets/less/variables.less', '_assets/less/style.less', '_assets/less/**/*.less'],
-	destJS : `${pkg.directories.content}${path.sep}themes${path.sep}${pkg.name}${path.sep}js`,
-	destCSS : `${pkg.directories.content}${path.sep}themes${path.sep}${pkg.name}`,
+	destJS : `${pkg.directories.content}/themes/${themeName}/js`,
+	destCSS : `${pkg.directories.content}/themes/${themeName}`,
 };
 
 const develop = aw.gulp.series( aw.gulp.parallel( devJS, devCSS ), watchFiles );

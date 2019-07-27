@@ -1,5 +1,6 @@
 {
   "name": "theme-folder",
+  "title": "Theme Name",
   "version": "2.0.0",
   "description": "Timber-based boilerplate for WordPress theme development",
   "author": "Alex Wharff",
